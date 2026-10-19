@@ -1,371 +1,1267 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheAdventureRent - Rental Alat Pendakian Resmi</title>
+    <title>TheAdventureRent - Rental Alat Pendakian Murah & Tepercaya</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome CDN -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
+                        forest: {
+                            50: '#f2f9f5',
+                            100: '#e1f2e8',
                             600: '#16a34a',
                             700: '#15803d',
                             800: '#166534',
                             900: '#14532d',
+                            950: '#052e16'
                         },
-                        dark: {
-                            800: '#1e293b',
-                            900: '#0f172a',
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706',
                         }
                     },
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
+
     <style>
-        .glass-nav {
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(12px);
+        body {
+            font-family: 'Inter', sans-serif;
         }
-        .product-card:hover {
-            transform: translateY(-5px);
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #16a34a;
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-forest-600 selection:text-white">
 
-    <!-- PERINGATAN PENIPUAN BANNER TOP -->
-    <div class="bg-red-600 text-white text-xs sm:text-sm font-semibold py-2 px-4 text-center shadow-lg relative z-50 flex items-center justify-center gap-2">
-        <i class="fa-solid fa-triangle-exclamation animate-pulse"></i>
-        <span>PERINGATAN RESMI: Transaksi hanya melalui WA <strong>082140691531</strong> & Rekening SeaBank <strong>901503676168</strong>. Selain kontak & rekening ini adalah <u>PENIPUAN</u>!</span>
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-24 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- GLOBAL SECURITY WARNING BANNER -->
+    <div class="bg-red-600 text-white text-xs font-bold py-2.5 px-4 text-center border-b border-red-700 shadow-sm relative z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-center gap-2 flex-wrap">
+            <span class="bg-white text-red-700 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider animate-pulse">
+                <i class="fa-solid fa-shield-cat"></i> PERINGATAN WASPADA PENIPUAN
+            </span>
+            <span>Pembayaran & Kontak RESMI TheAdventureRent HANYA via WhatsApp <strong class="underline decoration-yellow-300">082140691531</strong> & SeaBank <strong class="underline decoration-yellow-300">901503676168</strong> (a.n. TheAdventureRent Official). Selain nomor ini dipastikan PENIPUAN!</span>
+        </div>
     </div>
 
     <!-- NAVBAR HEADER -->
-    <header class="sticky top-0 z-40 glass-nav border-b border-slate-800">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Logo -->
-            <a href="#" onclick="showPage('home')" class="flex items-center space-x-3 group">
-                <div class="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-900/50 group-hover:scale-105 transition-transform">
-                    <i class="fa-solid fa-mountain text-2xl"></i>
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                <div class="w-11 h-11 bg-forest-700 text-white rounded-2xl flex items-center justify-center text-xl font-black shadow-md shadow-forest-700/20">
+                    <i class="fa-solid fa-mountain text-amber-500"></i>
                 </div>
                 <div>
-                    <span class="text-xl font-extrabold tracking-tight text-white block leading-none">TheAdventureRent</span>
-                    <span class="text-[10px] text-emerald-400 font-medium tracking-widest uppercase">Outdoor Gear Rental</span>
+                    <span class="text-2xl font-black text-slate-900 tracking-tight leading-none block">TheAdventure<span class="text-forest-600">Rent</span></span>
+                    <span class="text-[10px] text-slate-500 font-semibold tracking-wider uppercase block">Rental Alat Gunung Termurah</span>
                 </div>
-            </a>
+            </div>
 
-            <!-- Navigation Links -->
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
-                <button onclick="showPage('home')" class="nav-link text-slate-300 hover:text-emerald-400 transition-colors">Beranda</button>
-                <button onclick="showPage('catalog')" class="nav-link text-slate-300 hover:text-emerald-400 transition-colors">Katalog Alat</button>
-                <button onclick="showPage('home'); scrollToCalculator();" class="nav-link text-slate-300 hover:text-emerald-400 transition-colors">Kalkulator Peralatan</button>
-                <a href="#footer" class="text-slate-300 hover:text-emerald-400 transition-colors">Syarat & Ketentuan</a>
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                <button onclick="navigateTo('home')" id="nav-home" class="nav-btn text-forest-700 font-bold hover:text-forest-600 transition">Beranda</button>
+                <button onclick="navigateTo('catalog')" id="nav-catalog" class="nav-btn hover:text-forest-600 transition">Katalog Alat</button>
+                <button onclick="navigateTo('guide')" id="nav-guide" class="nav-btn hover:text-forest-600 transition">Cara Sewa</button>
+                <button onclick="navigateTo('contact')" id="nav-contact" class="nav-btn hover:text-forest-600 transition">Kontak & Lokasi</button>
             </nav>
 
-            <!-- Actions -->
-            <div class="flex items-center space-x-4">
-                <button onclick="showPage('cart')" class="relative p-2 text-slate-300 hover:text-emerald-400 transition-colors">
+            <!-- Header Actions -->
+            <div class="flex items-center gap-3">
+                <button onclick="navigateTo('cart')" class="relative p-2.5 text-slate-700 hover:text-forest-600 hover:bg-slate-100 rounded-xl transition">
                     <i class="fa-solid fa-cart-shopping text-xl"></i>
-                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-emerald-500 text-slate-950 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-amber-500 text-slate-900 font-black text-[11px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white hidden">0</span>
                 </button>
-                <a href="https://wa.me/6282140691531" target="_blank" class="hidden sm:inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md shadow-emerald-900/30">
-                    <i class="fa-brands fa-whatsapp text-lg"></i>
-                    <span>082140691531</span>
-                </a>
+                <button onclick="navigateTo('catalog')" class="hidden sm:inline-flex bg-forest-700 hover:bg-forest-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-md shadow-forest-700/20 items-center gap-2">
+                    <i class="fa-solid fa-compass"></i>
+                    Sewa Alat
+                </button>
+                
+                <!-- Mobile menu toggle button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-700 hover:text-slate-900 focus:outline-none">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
             </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-2">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left py-2.5 px-3 text-slate-700 font-bold rounded-lg hover:bg-slate-100">Beranda</button>
+            <button onclick="navigateTo('catalog'); toggleMobileMenu()" class="block w-full text-left py-2.5 px-3 text-slate-700 font-bold rounded-lg hover:bg-slate-100">Katalog Alat (16+ Produk)</button>
+            <button onclick="navigateTo('guide'); toggleMobileMenu()" class="block w-full text-left py-2.5 px-3 text-slate-700 font-bold rounded-lg hover:bg-slate-100">Cara Sewa</button>
+            <button onclick="navigateTo('contact'); toggleMobileMenu()" class="block w-full text-left py-2.5 px-3 text-slate-700 font-bold rounded-lg hover:bg-slate-100">Kontak & Lokasi</button>
         </div>
     </header>
 
-    <!-- MAIN CONTENT AREA -->
+    <!-- MAIN CONTENT CONTAINER -->
     <main class="flex-grow">
 
-        <!-- ==================== HOME PAGE ==================== -->
-        <section id="page-home" class="page-content">
+        <!-- VIEW 1: BERANDA (HOME) -->
+        <section id="view-home" class="page-view space-y-12 py-6">
             <!-- Hero Banner -->
-            <div class="relative bg-gradient-to-b from-slate-900 to-slate-950 pt-16 pb-24 border-b border-slate-800/80 overflow-hidden">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div class="max-w-3xl">
-                        <span class="inline-flex items-center gap-2 bg-emerald-950/80 text-emerald-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-emerald-800/50 mb-6">
-                            <i class="fa-solid fa-shield-halved"></i> Peralatan Steril, Terawat & Siap Pakai
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="relative rounded-3xl overflow-hidden bg-slate-900 text-white p-8 sm:p-12 lg:p-16 min-h-[460px] flex items-center shadow-2xl">
+                    <div class="absolute inset-0 z-0 opacity-40 mix-blend-overlay bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1600');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/80 to-transparent z-0"></div>
+
+                    <div class="relative z-10 max-w-2xl space-y-6">
+                        <span class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase">
+                            <i class="fa-solid fa-tag"></i> HANYA UNTUK KTP / SIM / KTM - DEPOSIT Rp 0
                         </span>
-                        <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight mb-6">
-                            Sewa Alat Pendakian Berkualitas di <span class="text-emerald-400">TheAdventureRent</span>
+                        <h1 class="text-3xl sm:text-5xl font-black leading-tight tracking-tight">
+                            Sewa Alat Pendakian Murah & Berkualitas
                         </h1>
-                        <p class="text-slate-400 text-lg sm:text-xl mb-8 leading-relaxed">
-                            Jelajahi keindahan alam tanpa ragu. Kami menyediakan berbagai pilihan alat pendakian gunung standar keselamatan tinggi dengan harga terjangkau dan proses sewa cepat.
+                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                            Nikmati pendakian tanpa pusing biaya peralatan mahal! Di <strong>TheAdventureRent</strong>, tarif sewa mulai dari <strong>Rp 5.000/hari</strong>. Bebas biaya deposit jaminan uang, cukup serahkan KTP/SIM asli saat pengambilan.
                         </p>
-                        <div class="flex flex-wrap gap-4">
-                            <button onclick="showPage('catalog')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-emerald-900/40 transition-all flex items-center gap-3">
-                                <span>Lihat Katalog Produk</span>
-                                <i class="fa-solid fa-arrow-right"></i>
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <button onclick="navigateTo('catalog')" class="bg-forest-600 hover:bg-forest-700 text-white px-7 py-3.5 rounded-xl font-bold shadow-lg shadow-forest-600/30 transition flex items-center gap-3">
+                                Lihat Katalog Alat <i class="fa-solid fa-arrow-right"></i>
                             </button>
-                            <button onclick="scrollToCalculator()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold px-6 py-4 rounded-xl transition-all border border-slate-700">
-                                <i class="fa-solid fa-calculator text-emerald-400 mr-2"></i> Hitung Kebutuhan Alat
-                            </button>
+                            <a href="#calculator-section" class="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white px-6 py-3.5 rounded-xl font-semibold border border-white/20 transition flex items-center gap-2">
+                                <i class="fa-solid fa-calculator text-amber-400"></i> Hitung Kebutuhan
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Kalkulator Rekomendasi -->
-            <div id="calculator-section" class="py-16 bg-slate-900/50 border-b border-slate-800">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center max-w-2xl mx-auto mb-12">
-                        <h2 class="text-3xl font-extrabold text-white mb-3">Kalkulator Rekomendasi Pendakian</h2>
-                        <p class="text-slate-400">Bingung mau bawa alat apa saja? Hitung estimasi kebutuhan alat berdasarkan jumlah personil & durasi pendakian Anda.</p>
+            <!-- Smart Gear Calculator -->
+            <div id="calculator-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-forest-600">Simulasi Praktis</span>
+                            <h2 class="text-2xl font-extrabold text-slate-900">Kalkulator Rekomendasi Perlengkapan</h2>
+                            <p class="text-slate-500 text-xs sm:text-sm">Berapa personil dan berapa hari Anda akan mendaki?</p>
+                        </div>
+                        <div class="bg-emerald-50 text-emerald-800 text-xs font-bold px-4 py-2 rounded-xl border border-emerald-200">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i> Tanpa Biaya Deposit Uang
+                        </div>
                     </div>
 
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 max-w-4xl mx-auto shadow-2xl">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Durasi Pendakian</label>
-                                <select id="calc-duration" onchange="calculateGearNeeds()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500">
-                                    <option value="1">1 Hari (Tekstur/Tektok)</option>
-                                    <option value="2" selected>2 Hari 1 Malam (2D1N)</option>
-                                    <option value="3">3 Hari 2 Malam (3D2N)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Jumlah Anggota Team</label>
-                                <input type="number" id="calc-people" value="2" min="1" max="15" onchange="calculateGearNeeds()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Estimasi Cuaca</label>
-                                <select id="calc-weather" onchange="calculateGearNeeds()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500">
-                                    <option value="normal">Cerah / Normal</option>
-                                    <option value="rain">Musim Hujan (Ekstra Proteksi)</option>
-                                </select>
-                            </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-50 p-5 rounded-2xl mb-6">
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase text-slate-600 flex justify-between">
+                                Jumlah Personil: <span id="calc-person-val" class="text-forest-700 text-sm font-extrabold">2 Orang</span>
+                            </label>
+                            <input type="range" id="calc-person" min="1" max="10" value="2" oninput="updateCalculator()" class="w-full accent-forest-600 cursor-pointer h-2 bg-slate-200 rounded-lg">
                         </div>
 
-                        <!-- Hasil Kalkulator -->
-                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-6">
-                            <h3 class="text-sm font-bold text-emerald-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                                <i class="fa-solid fa-list-check"></i> Rekomendasi Checklist Minimal:
-                            </h3>
-                            <div id="calc-results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-sm text-slate-300">
-                                <!-- Dynamic Output -->
-                            </div>
-                            <div class="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-                                <div>
-                                    <span class="text-xs text-slate-400">Estimasi Total Biaya Sewa/Hari:</span>
-                                    <p id="calc-price" class="text-2xl font-black text-emerald-400">Rp 0</p>
-                                </div>
-                                <button onclick="showPage('catalog')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl transition-all">
-                                    Pesan Paket Ini Sekarang
-                                </button>
-                            </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase text-slate-600">Durasi Pendakian</label>
+                            <select id="calc-duration" onchange="updateCalculator()" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-forest-600">
+                                <option value="1">1 Hari (Tek-Tok / Tanpa Menginap)</option>
+                                <option value="2" selected>2 Hari 1 Malam (Standar)</option>
+                                <option value="3">3 Hari 2 Malam (Ekspedisi)</option>
+                            </select>
                         </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase text-slate-600">Kondisi Musim Jalur</label>
+                            <select id="calc-weather" onchange="updateCalculator()" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-forest-600">
+                                <option value="normal">Cerah / Kemarau</option>
+                                <option value="rainy">Musim Hujan (+ Jas Hujan & Flysheet)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div id="calc-results-list" class="flex flex-wrap gap-2 text-xs">
+                            <!-- Items inserted dynamically -->
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-slate-400 block font-semibold">Estimasi Paket Lengkap:</span>
+                            <span id="calc-est-price" class="text-2xl font-black text-forest-700">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-xl mx-auto mb-8">
+                    <h2 class="text-2xl font-extrabold text-slate-900">Kategori Peralatan Sewa</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm mt-1">Pilih kategori alat outdoor yang Anda butuhkan</p>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                    <div onclick="filterCategoryAndNavigate('Tenda')" class="bg-white p-4 rounded-2xl border border-slate-200 text-center cursor-pointer hover:border-forest-600 hover:shadow-md transition">
+                        <i class="fa-solid fa-campground text-2xl text-emerald-600 mb-2"></i>
+                        <h3 class="font-bold text-xs text-slate-800">Tenda</h3>
+                    </div>
+                    <div onclick="filterCategoryAndNavigate('Carrier')" class="bg-white p-4 rounded-2xl border border-slate-200 text-center cursor-pointer hover:border-forest-600 hover:shadow-md transition">
+                        <i class="fa-solid fa-bag-shopping text-2xl text-amber-600 mb-2"></i>
+                        <h3 class="font-bold text-xs text-slate-800">Carrier</h3>
+                    </div>
+                    <div onclick="filterCategoryAndNavigate('Cooking')" class="bg-white p-4 rounded-2xl border border-slate-200 text-center cursor-pointer hover:border-forest-600 hover:shadow-md transition">
+                        <i class="fa-solid fa-fire-burner text-2xl text-rose-600 mb-2"></i>
+                        <h3 class="font-bold text-xs text-slate-800">Alat Masak</h3>
+                    </div>
+                    <div onclick="filterCategoryAndNavigate('Sleeping')" class="bg-white p-4 rounded-2xl border border-slate-200 text-center cursor-pointer hover:border-forest-600 hover:shadow-md transition">
+                        <i class="fa-solid fa-bed text-2xl text-indigo-600 mb-2"></i>
+                        <h3 class="font-bold text-xs text-slate-800">Sleeping Bag</h3>
+                    </div>
+                    <div onclick="filterCategoryAndNavigate('Apparel')" class="bg-white p-4 rounded-2xl border border-slate-200 text-center cursor-pointer hover:border-forest-600 hover:shadow-md transition">
+                        <i class="fa-solid fa-shirt text-2xl text-sky-600 mb-2"></i>
+                        <h3 class="font-bold text-xs text-slate-800">Jaket & Sepatu</h3>
+                    </div>
+                    <div onclick="filterCategoryAndNavigate('Accessories')" class="bg-white p-4 rounded-2xl border border-slate-200 text-center cursor-pointer hover:border-forest-600 hover:shadow-md transition">
+                        <i class="fa-solid fa-headlamp text-2xl text-purple-600 mb-2"></i>
+                        <h3 class="font-bold text-xs text-slate-800">Aksesori</h3>
                     </div>
                 </div>
             </div>
 
             <!-- Featured Products -->
-            <div class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between mb-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Produk Favorit Pendaki</h2>
-                        <p class="text-slate-400 text-sm mt-1">Peralatan paling banyak disewa dengan rating terbaik.</p>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Produk Paling Laris</h2>
+                        <p class="text-slate-500 text-xs">Tarif sewa termurah dengan kualitas bersih & siap pakai</p>
                     </div>
-                    <button onclick="showPage('catalog')" class="text-emerald-400 hover:text-emerald-300 font-semibold text-sm flex items-center gap-1">
-                        Lihat Semua <i class="fa-solid fa-chevron-right text-xs"></i>
+                    <button onclick="navigateTo('catalog')" class="text-forest-700 font-bold hover:underline text-xs sm:text-sm">
+                        Lihat Semua Katalog (16+) <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
 
-                <div id="featured-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Dynamic rendering -->
+                <div id="home-featured-products" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                    <!-- Loaded dynamically -->
                 </div>
             </div>
         </section>
 
-        <!-- ==================== CATALOG PAGE ==================== -->
-        <section id="page-catalog" class="page-content hidden py-10">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Page Header -->
-                <div class="mb-8">
-                    <h1 class="text-3xl font-extrabold text-white">Katalog Peralatan Pendakian</h1>
-                    <p class="text-slate-400 text-sm mt-1">Pilih peralatan pendakian lengkap & berkualitas tinggi dari TheAdventureRent.</p>
+        <!-- VIEW 2: KATALOG ALAT (CATALOG) -->
+        <section id="view-catalog" class="page-view hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Katalog Peralatan Pendakian</h1>
+                    <p class="text-slate-500 text-xs sm:text-sm mt-1">Lengkap 16+ pilihan alat outdoor termurah - Tanpa Uang Deposit</p>
                 </div>
-
-                <!-- Search & Filters -->
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-8 flex flex-col md:flex-row gap-4 justify-between items-center">
-                    <!-- Search Input -->
-                    <div class="relative w-full md:w-96">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
-                        <input type="text" id="catalog-search" onkeyup="filterProducts()" placeholder="Cari tenda, carrier, kompor..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-11 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                
+                <!-- Search & Sort -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="relative flex-1 sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="catalog-search" oninput="applyFilters()" placeholder="Cari tenda, kompor..." class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-forest-600">
                     </div>
-
-                    <!-- Category Pills -->
-                    <div class="flex flex-wrap gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-                        <button onclick="setCategoryFilter('all')" class="cat-pill active-pill px-4 py-2 rounded-xl text-xs font-bold transition-all bg-emerald-600 text-white">Semua</button>
-                        <button onclick="setCategoryFilter('tenda')" class="cat-pill px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-400 hover:bg-slate-700">Tenda</button>
-                        <button onclick="setCategoryFilter('carrier')" class="cat-pill px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-400 hover:bg-slate-700">Carrier / Tas</button>
-                        <button onclick="setCategoryFilter('sleep')" class="cat-pill px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-400 hover:bg-slate-700">Sleeping Bag / Matras</button>
-                        <button onclick="setCategoryFilter('cook')" class="cat-pill px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-400 hover:bg-slate-700">Alat Masak</button>
-                        <button onclick="setCategoryFilter('aksesoris')" class="cat-pill px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-400 hover:bg-slate-700">Aksesoris</button>
-                    </div>
+                    <select id="catalog-sort" onchange="applyFilters()" class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-forest-600">
+                        <option value="popular">Paling Populer</option>
+                        <option value="low-high">Harga: Termurah - Termahal</option>
+                        <option value="high-low">Harga: Termahal - Termurah</option>
+                    </select>
                 </div>
+            </div>
 
-                <!-- Products Grid -->
-                <div id="catalog-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Dynamic Items -->
-                </div>
+            <!-- Category Filter Pills -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 hide-scrollbar text-xs font-bold">
+                <button onclick="setCategoryFilter('all')" class="cat-pill bg-forest-700 text-white px-4 py-2 rounded-full whitespace-nowrap transition" data-cat="all">Semua (16)</button>
+                <button onclick="setCategoryFilter('Tenda')" class="cat-pill bg-white hover:bg-slate-100 text-slate-600 px-4 py-2 rounded-full border border-slate-200 whitespace-nowrap transition" data-cat="Tenda">Tenda</button>
+                <button onclick="setCategoryFilter('Carrier')" class="cat-pill bg-white hover:bg-slate-100 text-slate-600 px-4 py-2 rounded-full border border-slate-200 whitespace-nowrap transition" data-cat="Carrier">Carrier</button>
+                <button onclick="setCategoryFilter('Cooking')" class="cat-pill bg-white hover:bg-slate-100 text-slate-600 px-4 py-2 rounded-full border border-slate-200 whitespace-nowrap transition" data-cat="Cooking">Alat Masak</button>
+                <button onclick="setCategoryFilter('Sleeping')" class="cat-pill bg-white hover:bg-slate-100 text-slate-600 px-4 py-2 rounded-full border border-slate-200 whitespace-nowrap transition" data-cat="Sleeping">Sleeping Gear</button>
+                <button onclick="setCategoryFilter('Apparel')" class="cat-pill bg-white hover:bg-slate-100 text-slate-600 px-4 py-2 rounded-full border border-slate-200 whitespace-nowrap transition" data-cat="Apparel">Jaket & Sepatu</button>
+                <button onclick="setCategoryFilter('Accessories')" class="cat-pill bg-white hover:bg-slate-100 text-slate-600 px-4 py-2 rounded-full border border-slate-200 whitespace-nowrap transition" data-cat="Accessories">Aksesori</button>
+            </div>
+
+            <!-- Catalog Grid -->
+            <div id="catalog-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <div id="catalog-empty" class="hidden text-center py-16 bg-white rounded-3xl border border-dashed border-slate-200">
+                <i class="fa-solid fa-box-open text-4xl text-slate-300 mb-2"></i>
+                <h3 class="text-sm font-bold text-slate-700">Peralatan tidak ditemukan</h3>
+                <p class="text-slate-400 text-xs mt-1">Coba gunakan kata kunci lain.</p>
             </div>
         </section>
 
-        <!-- ==================== PRODUCT DETAIL PAGE ==================== -->
-        <section id="page-detail" class="page-content hidden py-10">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <button onclick="showPage('catalog')" class="mb-6 text-slate-400 hover:text-white flex items-center gap-2 text-sm font-semibold transition-colors">
-                    <i class="fa-solid fa-arrow-left"></i> Kembali ke Katalog
-                </button>
+        <!-- VIEW 3: DETAIL PRODUK (PRODUCT DETAIL) -->
+        <section id="view-detail" class="page-view hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <button onclick="navigateTo('catalog')" class="text-slate-600 hover:text-forest-600 font-bold text-xs mb-4 inline-flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Katalog
+            </button>
 
-                <div id="product-detail-container" class="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-10">
-                    <!-- Rendered dynamically -->
-                </div>
+            <div id="detail-container" class="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200">
+                <!-- Injected via JavaScript -->
             </div>
         </section>
 
-        <!-- ==================== CART & DATE PICKER PAGE ==================== -->
-        <section id="page-cart" class="page-content hidden py-10">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-extrabold text-white mb-8">Keranjang & Jadwal Sewa</h1>
+        <!-- VIEW 4: KERANJANG SEWA (CART) -->
+        <section id="view-cart" class="page-view hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Keranjang Sewa Peralatan</h1>
 
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <!-- Cart Items List -->
-                    <div class="lg:col-span-8 space-y-6">
-                        <!-- Tanggal Sewa Section -->
-                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                            <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <i class="fa-regular fa-calendar-check text-emerald-400"></i> Tanggal Pengambilan & Pengembalian
-                            </h2>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-400 mb-1">Tanggal Ambil (Mulai)</label>
-                                    <input type="date" id="rent-start-date" onchange="updateCartSummary()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-400 mb-1">Tanggal Kembali (Selesai)</label>
-                                    <input type="date" id="rent-end-date" onchange="updateCartSummary()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500">
-                                </div>
-                            </div>
-                            <p class="text-xs text-slate-400 mt-3"><i class="fa-solid fa-info-circle text-emerald-400 mr-1"></i> Perhitungan sewa dihitung per 24 Jam. Pengembalian telat dikenakan denda proporsional.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left: Items & Date Picker -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Date Selector Box -->
+                    <div class="bg-forest-50/80 border border-forest-200 rounded-2xl p-5 space-y-4">
+                        <div class="flex items-center gap-2 text-forest-800 font-bold text-sm border-b border-forest-200/60 pb-2">
+                            <i class="fa-regular fa-calendar-days text-forest-600"></i>
+                            Pilih Tanggal Pengambilan & Pengembalian
                         </div>
-
-                        <!-- Item List -->
-                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                            <h2 class="text-lg font-bold text-white mb-4">Daftar Peralatan</h2>
-                            <div id="cart-items-container" class="space-y-4 divide-y divide-slate-800">
-                                <!-- Cart items -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Summary & Checkout Sidebar -->
-                    <div class="lg:col-span-4">
-                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sticky top-28 space-y-4">
-                            <h2 class="text-lg font-bold text-white pb-3 border-b border-slate-800">Ringkasan Biaya</h2>
-                            
-                            <div class="space-y-2 text-sm">
-                                <div class="flex justify-between text-slate-400">
-                                    <span>Total Peralatan:</span>
-                                    <span id="cart-item-count" class="text-white font-medium">0 barang</span>
-                                </div>
-                                <div class="flex justify-between text-slate-400">
-                                    <span>Durasi Sewa:</span>
-                                    <span id="cart-duration-text" class="text-white font-medium">1 Hari</span>
-                                </div>
-                                <div class="flex justify-between text-slate-400">
-                                    <span>Deposit Jaminan (Refundable):</span>
-                                    <span class="text-emerald-400 font-medium">Rp 50.000</span>
-                                </div>
-                                <div class="pt-3 border-t border-slate-800 flex justify-between text-base font-extrabold text-white">
-                                    <span>Total Estimasi:</span>
-                                    <span id="cart-total-price" class="text-emerald-400">Rp 0</span>
-                                </div>
-                            </div>
-
-                            <button onclick="goToCheckout()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-900/30">
-                                Lanjut ke Pembayaran & Jaminan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== CHECKOUT & PAYMENT PAGE ==================== -->
-        <section id="page-checkout" class="page-content hidden py-10">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- WARNING BOX PENIPUAN AMAN -->
-                <div class="bg-red-950/80 border-2 border-red-600 rounded-2xl p-5 mb-8 flex items-start gap-4">
-                    <i class="fa-solid fa-shield-cat text-3xl text-red-500 mt-1"></i>
-                    <div>
-                        <h3 class="text-red-400 font-bold text-base uppercase tracking-wider">Hati-Hati Penipuan Mengatasnamakan TheAdventureRent!</h3>
-                        <p class="text-slate-300 text-sm mt-1">
-                            Semua transaksi penyewaan HANYA melayani nomor WhatsApp resmi <strong>082140691531</strong> dan pembayaran transfer ke <strong>SeaBank 901503676168 a.n. TheAdventureRent</strong>. Jangan pernah melakukan transaksi di luar rekening ini!
-                        </p>
-                    </div>
-                </div>
-
-                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 space-y-8">
-                    <div>
-                        <h1 class="text-2xl font-black text-white">Formulir Penyewa & Metode Jaminan</h1>
-                        <p class="text-slate-400 text-sm mt-1">Lengkapi identitas Anda untuk verifikasi keselamatan peralatan.</p>
-                    </div>
-
-                    <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)" class="space-y-6">
-                        <!-- Data Diri -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">Nama Lengkap Sesuai KTP *</label>
-                                <input type="text" id="cust-name" required placeholder="Contoh: Budi Santoso" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Tanggal Ambil Alat</label>
+                                <input type="date" id="rental-start-date" onchange="calculateRentalDuration()" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-forest-600">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">Nomor WhatsApp Aktif *</label>
-                                <input type="tel" id="cust-phone" required placeholder="08XXXXXXXXXX" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                                <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Tanggal Pengembalian</label>
+                                <input type="date" id="rental-end-date" onchange="calculateRentalDuration()" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-forest-600">
                             </div>
-                            <div class="sm:col-span-2">
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">Alamat Lengkap Domisili *</label>
-                                <textarea id="cust-address" required rows="2" placeholder="Nama Jalan, No. Rumah, RT/RW, Kecamatan, Kota" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500"></textarea>
+                        </div>
+                        <div class="flex justify-between items-center text-xs font-semibold text-slate-600">
+                            <span>Total Durasi Penyewaan:</span>
+                            <span id="rental-duration-display" class="bg-forest-700 text-white px-3 py-1 rounded-full font-bold">1 Hari</span>
+                        </div>
+                    </div>
+
+                    <!-- Cart Item List -->
+                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                        <div class="p-3 bg-slate-100 border-b border-slate-200 font-bold text-xs uppercase text-slate-500 tracking-wider flex justify-between">
+                            <span>Peralatan Disewa</span>
+                            <span>Subtotal</span>
+                        </div>
+                        <div id="cart-items-list" class="divide-y divide-slate-100">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Summary -->
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+                        <h2 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2">Ringkasan Pembayaran</h2>
+                        
+                        <div class="space-y-2 text-xs text-slate-600">
+                            <div class="flex justify-between">
+                                <span>Total Sewa / Hari:</span>
+                                <span id="cart-subtotal-per-day" class="font-bold text-slate-800">Rp 0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Durasi Sewa:</span>
+                                <span id="cart-days-count" class="font-bold text-slate-800">1 Hari</span>
+                            </div>
+                            <div class="flex justify-between text-emerald-700 bg-emerald-50 p-2 rounded-lg font-bold border border-emerald-200">
+                                <span>Jaminan Deposit Uang:</span>
+                                <span>GRATIS (Rp 0)</span>
                             </div>
                         </div>
 
-                        <!-- Upload KTP / Jaminan Identitas -->
-                        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6">
-                            <label class="block text-sm font-bold text-white mb-1">Upload Identitas Asli (KTP / SIM / KTM) *</label>
-                            <p class="text-xs text-slate-400 mb-4">Wajib dibawa dokumen aslinya saat verifikasi fisik pengambilan alat.</p>
-                            
-                            <div class="border-2 border-dashed border-slate-800 hover:border-emerald-500/50 rounded-xl p-6 text-center cursor-pointer transition-colors bg-slate-900/50">
-                                <i class="fa-solid fa-id-card text-3xl text-emerald-400 mb-2"></i>
-                                <p class="text-sm text-slate-300 font-medium">Klik untuk upload foto KTP/SIM/KTM</p>
-                                <p class="text-xs text-slate-500 mt
+                        <div class="border-t border-slate-200 pt-3 flex justify-between items-end">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-slate-400 block">Total Tagihan Sewa</span>
+                                <span id="cart-grand-total" class="text-2xl font-black text-forest-700">Rp 0</span>
+                            </div>
+                        </div>
+
+                        <button onclick="navigateTo('checkout')" id="btn-proceed-checkout" class="w-full bg-forest-700 hover:bg-forest-800 text-white font-bold py-3 rounded-xl transition shadow-md shadow-forest-700/20 text-center block text-xs">
+                            Lanjut ke Isi Form & Pembayaran <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-100 rounded-xl p-4 text-xs text-slate-600 space-y-1">
+                        <p class="font-bold text-slate-800"><i class="fa-solid fa-id-card text-forest-600"></i> Syarat Mudah Jaminan:</p>
+                        <p>Cukup serahkan KTP/SIM/KTM asli saat mengambil barang di toko. Tanpa perlu uang deposit sama sekali.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 5: CHECKOUT & FORM PEMBAYARAN -->
+        <section id="view-checkout" class="page-view hidden max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+            <button onclick="navigateTo('cart')" class="text-slate-600 hover:text-forest-600 font-bold text-xs inline-flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Keranjang
+            </button>
+
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Formulir Penyewaan & Pembayaran</h1>
+
+            <!-- CHECKOUT SECURITY WARNING -->
+            <div class="bg-red-50 border-2 border-red-500 rounded-2xl p-4 text-xs text-red-900 space-y-1">
+                <div class="font-black flex items-center gap-2 text-red-700 text-sm">
+                    <i class="fa-solid fa-triangle-exclamation text-lg"></i> REKENING & KONTAK RESMI
+                </div>
+                <p>Transfer tagihan HANYA ke <strong>SeaBank 901503676168 a.n. TheAdventureRent Official</strong> atau scan QRIS resmi. Konfirmasi via WhatsApp HANYA ke <strong>082140691531</strong>. Hati-hati penipuan!</p>
+            </div>
+
+            <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)" class="space-y-6">
+                <!-- Step 1: Identitas -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
+                    <h2 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                        <span class="w-5 h-5 bg-forest-700 text-white rounded-full text-xs flex items-center justify-center font-bold">1</span>
+                        Data Diri Penyewa
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nama Lengkap (Sesuai KTP) *</label>
+                            <input type="text" id="cust-name" required placeholder="Budi Santoso" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-forest-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nomor WhatsApp Aktif *</label>
+                            <input type="tel" id="cust-phone" required placeholder="081234567890" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-forest-600">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Alamat Tinggal Sekarang *</label>
+                            <textarea id="cust-address" required rows="2" placeholder="Jl. Mawar No. 12, Kelurahan..." class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-forest-600"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Upload Identitas -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
+                    <h2 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                        <span class="w-5 h-5 bg-forest-700 text-white rounded-full text-xs flex items-center justify-center font-bold">2</span>
+                        Foto Jaminan (KTP / SIM / KTM)
+                    </h2>
+                    
+                    <p class="text-xs text-slate-500">Unggah foto KTP/SIM asli untuk verifikasi data (Fisik kartu asli wajib ditunjukkan/dijaminkan saat ambil alat).</p>
+
+                    <div class="border-2 border-dashed border-slate-300 rounded-2xl p-4 text-center hover:bg-slate-50 transition cursor-pointer relative">
+                        <input type="file" accept="image/*" onchange="previewKtpUpload(event)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                        <div id="ktp-upload-prompt" class="space-y-1">
+                            <i class="fa-solid fa-id-card text-3xl text-slate-300"></i>
+                            <p class="text-xs font-bold text-slate-700">Klik / Seret Foto KTP di sini</p>
+                        </div>
+                        <div id="ktp-upload-preview" class="hidden">
+                            <img id="ktp-preview-img" src="" alt="KTP Preview" class="max-h-32 mx-auto rounded-lg shadow-sm">
+                            <p class="text-xs text-emerald-600 font-bold mt-1"><i class="fa-solid fa-circle-check"></i> Foto Identitas Siap</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Pembayaran -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
+                    <h2 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                        <span class="w-5 h-5 bg-forest-700 text-white rounded-full text-xs flex items-center justify-center font-bold">3</span>
+                        Metode Pembayaran
+                    </h2>
+
+                    <div class="space-y-2">
+                        <label class="border border-slate-200 p-3 rounded-xl flex items-center justify-between cursor-pointer hover:bg-slate-50">
+                            <div class="flex items-center gap-3">
+                                <input type="radio" name="payment_method" value="qris" checked class="accent-forest-600">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-800 block">QRIS (BCA, OVO, GoPay, Dana, ShopeePay)</span>
+                                    <span class="text-[10px] text-slate-400">Scan otomatis instant</span>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-qrcode text-xl text-slate-600"></i>
+                        </label>
+
+                        <label class="border border-slate-200 p-3 rounded-xl flex items-center justify-between cursor-pointer hover:bg-slate-50">
+                            <div class="flex items-center gap-3">
+                                <input type="radio" name="payment_method" value="seabank" class="accent-forest-600">
+                                <div>
+                                    <span class="text-xs font-bold text-slate-800 block">Transfer SeaBank (Rekening Resmi)</span>
+                                    <span class="text-[10px] text-slate-500 font-mono font-bold">901503676168 a.n. TheAdventureRent Official</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-black bg-blue-100 text-blue-700 px-2 py-1 rounded">SeaBank</span>
+                        </label>
+                    </div>
+
+                    <div class="bg-forest-900 text-white p-4 rounded-xl space-y-1">
+                        <span class="text-[10px] text-slate-300 uppercase font-bold block">Total Yang Harus Dibayar:</span>
+                        <span id="checkout-pay-now-amount" class="text-2xl font-black text-amber-400">Rp 0</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-forest-700 hover:bg-forest-800 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-forest-700/30">
+                    Konfirmasi Booking & Dapatkan Nota <i class="fa-solid fa-check-circle ml-1"></i>
+                </button>
+            </form>
+        </section>
+
+        <!-- VIEW 6: NOTA / INVOICE (RECEIPT) -->
+        <section id="view-receipt" class="page-view hidden max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xl space-y-6">
+                <!-- Status Header -->
+                <div class="text-center space-y-2 border-b border-slate-100 pb-5">
+                    <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl mx-auto">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <span class="bg-amber-100 text-amber-800 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Menunggu Pembayaran</span>
+                    <h1 class="text-2xl font-black text-slate-900">Nota Pemesanan Sewa</h1>
+                    <p class="text-slate-500 text-xs">Kode Booking: <span id="receipt-booking-id" class="font-mono font-bold text-slate-800">TAR-2026-XXXX</span></p>
+                </div>
+
+                <!-- Payment Details Box -->
+                <div class="bg-slate-50 p-5 rounded-2xl text-center space-y-3 border border-slate-200">
+                    <p class="text-xs font-bold text-slate-700 uppercase">Instruksi Pembayaran Resmi:</p>
+                    
+                    <div class="w-40 h-40 mx-auto bg-white p-2 rounded-xl border border-slate-200 shadow-inner">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=TheAdventureRent-SeaBank-901503676168" alt="QRIS Code" class="w-full h-full object-contain">
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-xs text-slate-500">Transfer SeaBank:</p>
+                        <p class="text-base font-black text-slate-900 font-mono">901503676168</p>
+                        <p class="text-xs font-bold text-forest-700">a.n. TheAdventureRent Official</p>
+                    </div>
+
+                    <div class="border-t border-slate-200 pt-2">
+                        <p class="text-xs text-slate-500">Nominal Transfer:</p>
+                        <p id="receipt-transfer-amount" class="text-2xl font-black text-forest-700">Rp 0</p>
+                    </div>
+                </div>
+
+                <!-- Rental Details -->
+                <div class="space-y-2 text-xs border-b border-slate-100 pb-4">
+                    <div class="flex justify-between text-slate-600">
+                        <span>Penyewa:</span>
+                        <span id="receipt-cust-name" class="font-bold text-slate-800">-</span>
+                    </div>
+                    <div class="flex justify-between text-slate-600">
+                        <span>Tanggal Sewa:</span>
+                        <span id="receipt-dates" class="font-bold text-slate-800">-</span>
+                    </div>
+                    <div class="flex justify-between text-slate-600">
+                        <span>Jaminan Deposit Uang:</span>
+                        <span class="text-emerald-700 font-bold">Rp 0 (KTP Asli)</span>
+                    </div>
+                </div>
+
+                <!-- Warning -->
+                <div class="bg-red-50 p-3 rounded-xl border border-red-200 text-[11px] text-red-800 text-center font-bold">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Selain nomor WA 082140691531 dan Rekening SeaBank 901503676168 adalah Penipuan!
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button onclick="window.print()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-print"></i> Cetak Invoice
+                    </button>
+                    <button onclick="sendWhatsAppConfirmation()" class="flex-1 bg-forest-700 hover:bg-forest-800 text-white font-bold py-3 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-base"></i> Konfirmasi Bukti via WA
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 7: CARA SEWA (GUIDE) -->
+        <section id="view-guide" class="page-view hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+            <div class="text-center max-w-xl mx-auto">
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Cara & Syarat Sewa Mudah</h1>
+                <p class="text-slate-500 text-xs sm:text-sm mt-1">Tanpa deposit uang tunai, cukup serahkan KTP/SIM/KTM asli</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-2">
+                    <div class="w-10 h-10 bg-forest-100 text-forest-700 font-black rounded-full flex items-center justify-center mx-auto text-sm">1</div>
+                    <h3 class="font-bold text-sm text-slate-800">Pilih Alat</h3>
+                    <p class="text-xs text-slate-500">Pilih alat dari katalog dengan harga murah mulai Rp 5.000/hari.</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-2">
+                    <div class="w-10 h-10 bg-forest-100 text-forest-700 font-black rounded-full flex items-center justify-center mx-auto text-sm">2</div>
+                    <h3 class="font-bold text-sm text-slate-800">Isi Form & Foto KTP</h3>
+                    <p class="text-xs text-slate-500">Isi data diri dan foto KTP/SIM untuk verifikasi awal.</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-2">
+                    <div class="w-10 h-10 bg-forest-100 text-forest-700 font-black rounded-full flex items-center justify-center mx-auto text-sm">3</div>
+                    <h3 class="font-bold text-sm text-slate-800">Transfer SeaBank / QRIS</h3>
+                    <p class="text-xs text-slate-500">Bayar ke SeaBank 901503676168 a.n. TheAdventureRent Official.</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-2">
+                    <div class="w-10 h-10 bg-forest-100 text-forest-700 font-black rounded-full flex items-center justify-center mx-auto text-sm">4</div>
+                    <h3 class="font-bold text-sm text-slate-800">Ambil Barang</h3>
+                    <p class="text-xs text-slate-500">Ambil barang di toko dengan menyerahkan KTP/SIM asli tanpa deposit uang.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 8: KONTAK (CONTACT) -->
+        <section id="view-contact" class="page-view hidden max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+            <div class="bg-white rounded-3xl border border-slate-200 p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Kontak Resmi Basecamp</h1>
+                    <p class="text-slate-500 text-xs">Hubungi admin resmi untuk pertanyaan stok & informasi pendakian.</p>
+                    
+                    <div class="space-y-3 text-xs">
+                        <div class="flex items-center gap-3 text-slate-700 bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                            <i class="fa-brands fa-whatsapp text-emerald-600 text-xl"></i>
+                            <div>
+                                <span class="font-bold block">WhatsApp Resmi:</span>
+                                <span class="font-bold text-slate-900">082140691531</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 text-slate-700 bg-blue-50 p-3 rounded-xl border border-blue-200">
+                            <i class="fa-solid fa-building-columns text-blue-600 text-xl"></i>
+                            <div>
+                                <span class="font-bold block">Rekening Resmi SeaBank:</span>
+                                <span class="font-bold text-slate-900">901503676168 (a.n. TheAdventureRent Official)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-100 rounded-2xl p-6 text-center space-y-3 flex flex-col justify-center border border-slate-200">
+                    <i class="fa-solid fa-map-location-dot text-4xl text-forest-700"></i>
+                    <h3 class="font-bold text-sm text-slate-800">Alamat Toko / Basecamp</h3>
+                    <p class="text-xs text-slate-500">Jl. Pendakian Raya No. 88, Kaki Gunung, Indonesia</p>
+                    <a href="https://wa.me/6282140691531" target="_blank" class="bg-forest-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition inline-block">
+                        Chat WhatsApp Admin
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-10 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-xs">
+            <div class="space-y-2">
+                <div class="flex items-center gap-2 text-white font-black text-lg">
+                    <i class="fa-solid fa-mountain text-amber-500"></i> TheAdventure<span class="text-forest-600">Rent</span>
+                </div>
+                <p class="text-slate-400 leading-relaxed">Penyedia sewa alat pendakian termurah & terlengkap. Tanpa deposit uang tunai!</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-2">Navigasi Halaman</h4>
+                <ul class="space-y-1.5">
+                    <li><button onclick="navigateTo('home')" class="hover:text-white">Beranda</button></li>
+                    <li><button onclick="navigateTo('catalog')" class="hover:text-white">Katalog Alat (16+ Produk)</button></li>
+                    <li><button onclick="navigateTo('guide')" class="hover:text-white">Cara & Syarat Sewa</button></li>
+                    <li><button onclick="navigateTo('contact')" class="hover:text-white">Kontak & Lokasi</button></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-2 text-red-400"><i class="fa-solid fa-shield-cat"></i> Info Anti-Penipuan</h4>
+                <p class="text-slate-400 leading-relaxed">
+                    WA Resmi: <strong>082140691531</strong><br>
+                    SeaBank: <strong>901503676168</strong><br>
+                    a.n. <strong>TheAdventureRent Official</strong>
+                </p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 pt-4 border-t border-slate-800 text-center text-[11px] text-slate-500">
+            &copy; 2026 TheAdventureRent Indonesia. Hak Cipta Dilindungi.
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // EXPANDED AFFORDABLE CATALOG DATA (16 PRODUCTS)
+        const PRODUCTS = [
+            {
+                id: 'prod-1',
+                name: 'Tenda Great Outdoor Java 4 Pro (Kapasitas 4-5 Orang)',
+                category: 'Tenda',
+                price: 25000,
+                rating: 4.9,
+                reviewsCount: 64,
+                stock: 8,
+                image: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&q=80&w=600',
+                specs: ['Kapasitas 4-5 Orang', 'Double Layer Waterproof 3000mm', 'Teras Vestibule Luas'],
+                description: 'Tenda tahan angin badai favorit pendaki kelompok. Kondisi harum, bersih, dan steril.'
+            },
+            {
+                id: 'prod-2',
+                name: 'Tenda Dome 2-3 Person Waterproof',
+                category: 'Tenda',
+                price: 18000,
+                rating: 4.8,
+                reviewsCount: 42,
+                stock: 10,
+                image: 'https://images.unsplash.com/photo-1478827536114-da961b7f86d2?auto=format&fit=crop&q=80&w=600',
+                specs: ['Kapasitas 2-3 Orang', 'Ringan & Praktis', 'Frame Fiber Solid'],
+                description: 'Tenda pasangan/solo yang sangat ringkas dan tidak memakan tempat di carrier.'
+            },
+            {
+                id: 'prod-3',
+                name: 'Tas Carrier Eiger Rhinos 60L + Raincover',
+                category: 'Carrier',
+                price: 20000,
+                rating: 4.9,
+                reviewsCount: 88,
+                stock: 12,
+                image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=600',
+                specs: ['Kapasitas 60 Liter', 'Busa Backsystem Berventilasi', 'Include Cover Hujan'],
+                description: 'Sangat nyaman di punggung untuk perjalanan 2-3 hari.'
+            },
+            {
+                id: 'prod-4',
+                name: 'Tas Carrier Deuter Aircontact 45L + 10L',
+                category: 'Carrier',
+                price: 18000,
+                rating: 4.7,
+                reviewsCount: 35,
+                stock: 7,
+                image: 'https://images.unsplash.com/photo-1622260614153-03223fb72052?auto=format&fit=crop&q=80&w=600',
+                specs: ['Kapasitas 45+10 Liter', 'Sistem Pembagi Beban Ergo', 'Bahan Anti Sobek'],
+                description: 'Ukuran pas untuk pendakian santai tek-tok atau 2 hari 1 malam.'
+            },
+            {
+                id: 'prod-5',
+                name: 'Cooking Set Nesting DS-308 (Lengkap)',
+                category: 'Cooking',
+                price: 10000,
+                rating: 4.8,
+                reviewsCount: 95,
+                stock: 15,
+                image: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&q=80&w=600',
+                specs: ['2 Panci Aluminium Anodized', '1 Wajan Penggorengan', 'Mangkuk & Sendok Sayur'],
+                description: 'Set alat masak lapangan anti lengket dan sangat ringan.'
+            },
+            {
+                id: 'prod-6',
+                name: 'Kompor Portable Mawar Windproof (Tahan Angin)',
+                category: 'Cooking',
+                price: 8000,
+                rating: 4.9,
+                reviewsCount: 110,
+                stock: 20,
+                image: 'https://images.unsplash.com/photo-1508873696983-2df515122519?auto=format&fit=crop&q=80&w=600',
+                specs: ['Pelindung Angin Kelopak', 'Pemantik Api Otomatis', 'Konektor Gas Kaleng'],
+                description: 'Api tetap stabil walau diterpa angin kencang di puncak.'
+            },
+            {
+                id: 'prod-7',
+                name: 'Sleeping Bag Thermal Goose Down Polar (-5°C)',
+                category: 'Sleeping',
+                price: 10000,
+                rating: 4.9,
+                reviewsCount: 120,
+                stock: 25,
+                image: 'https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&q=80&w=600',
+                specs: ['Lapisan Dalam Polar Hangat', 'Model Mummy Warm-Lock', 'Wangi & Dicuci Steril'],
+                description: 'Menjaga tubuh tetap hangat dari udara dingin ekstrem di Gunung.'
+            },
+            {
+                id: 'prod-8',
+                name: 'Matras Foil Thermal Aluminium (Double Side)',
+                category: 'Sleeping',
+                price: 5000,
+                rating: 4.6,
+                reviewsCount: 50,
+                stock: 30,
+                image: 'https://images.unsplash.com/photo-1584267385494-9fdd9a71ad75?auto=format&fit=crop&q=80&w=600',
+                specs: ['Memantulkan Panas Tubuh', 'Anti Basah & Embun Tanah', 'Ringan Gulung'],
+                description: 'Alas tidur wajib penghambat dingin tanah.'
+            },
+            {
+                id: 'prod-9',
+                name: 'Matras Tiup Inflatable Ultralight Empuk',
+                category: 'Sleeping',
+                price: 12000,
+                rating: 4.8,
+                reviewsCount: 28,
+                stock: 10,
+                image: 'https://images.unsplash.com/photo-1584267385494-9fdd9a71ad75?auto=format&fit=crop&q=80&w=600',
+                specs: ['Tebal 5cm Nyaman', 'Built-in Pompa Tangan', 'Ukuran Lipat Sebotol Air'],
+                description: 'Tidur nyenyak tanpa kerikil tajam.'
+            },
+            {
+                id: 'prod-10',
+                name: 'Trekking Pole Duralumin 7075 (Sepasang 2 pcs)',
+                category: 'Accessories',
+                price: 8000,
+                rating: 4.7,
+                reviewsCount: 65,
+                stock: 18,
+                image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=600',
+                specs: ['Isi 2 Pcs (Sepasang)', 'Sistem Pengunci Quick Lock', 'Panjang Adjustable'],
+                description: 'Mengurangi beban lutut saat turun dan menanjak.'
+            },
+            {
+                id: 'prod-11',
+                name: 'Headlamp LED Waterproof 500 Lumens Charge',
+                category: 'Accessories',
+                price: 5000,
+                rating: 4.9,
+                reviewsCount: 140,
+                stock: 30,
+                image: 'https://images.unsplash.com/photo-1508873696983-2df515122519?auto=format&fit=crop&q=80&w=600',
+                specs: ['Charge USB Type-C', 'Baterai Awet 12 Jam', 'Sensor Gerak'],
+                description: 'Senter kepala terang untuk perjalanan summit attack malam hari.'
+            },
+            {
+                id: 'prod-12',
+                name: 'Jaket Gunung Waterproof Windbreaker',
+                category: 'Apparel',
+                price: 15000,
+                rating: 4.8,
+                reviewsCount: 30,
+                stock: 12,
+                image: 'https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&q=80&w=600',
+                specs: ['Bahan Taslan Waterproof', 'Inner Polar Hangat', 'Ukuran M/L/XL'],
+                description: 'Jaket tahan angin dan gerimis.'
+            },
+            {
+                id: 'prod-13',
+                name: 'Sepatu Pendaki Waterproof Grip Anti Selip',
+                category: 'Apparel',
+                price: 20000,
+                rating: 4.7,
+                reviewsCount: 22,
+                stock: 8,
+                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=600',
+                specs: ['Sole Bergerigi Cengkram Tinggi', 'Pelindung Jari Kaki', 'Ukuran 39-44'],
+                description: 'Sepatu kokoh tidak licin di tanah basah atau bebatuan.'
+            },
+            {
+                id: 'prod-14',
+                name: 'Flysheet Ukuran 3x4 Meter Waterproof',
+                category: 'Tenda',
+                price: 8000,
+                rating: 4.8,
+                reviewsCount: 40,
+                stock: 15,
+                image: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&q=80&w=600',
+                specs: ['Ukuran 3x4 Meter', '19 Lubang Tali', 'Waterproof 2000mm'],
+                description: 'Atap tambahan dapur camp atau pelindung hujan tenda.'
+            },
+            {
+                id: 'prod-15',
+                name: 'Lampu Tenda Camping Rechargeable LED',
+                category: 'Accessories',
+                price: 5000,
+                rating: 4.8,
+                reviewsCount: 75,
+                stock: 20,
+                image: 'https://images.unsplash.com/photo-1508873696983-2df515122519?auto=format&fit=crop&q=80&w=600',
+                specs: ['Penerangan 360 Derajat', 'Bisa Dijadikan Powerbank', 'Baterai Awet'],
+                description: 'Lampu gantung terang di dalam tenda.'
+            },
+            {
+                id: 'prod-16',
+                name: 'Gas Kaleng Portable (Siap Pakai Full)',
+                category: 'Cooking',
+                price: 12000,
+                rating: 5.0,
+                reviewsCount: 200,
+                stock: 50,
+                image: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&q=80&w=600',
+                specs: ['Isi 230 gram Full', 'Gas Hi-Cook/Supercook Original'],
+                description: 'Gas isi ulang penuh untuk kebutuhan memasak.'
+            }
+        ];
+
+        // APP STATE
+        let appState = {
+            activeView: 'home',
+            cart: [],
+            categoryFilter: 'all',
+            searchQuery: '',
+            sortOrder: 'popular',
+            rentalStartDate: new Date().toISOString().split('T')[0],
+            rentalEndDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+            rentalDays: 1,
+            activeDetailProductId: null
+        };
+
+        // INITIAL ON LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('rental-start-date').value = appState.rentalStartDate;
+            document.getElementById('rental-end-date').value = appState.rentalEndDate;
+            
+            renderFeaturedHomeProducts();
+            renderCatalog();
+            updateCalculator();
+            updateCartBadge();
+        });
+
+        // VIEW ROUTING CONTROLLER - SWITCHES ALL PAGES PERFECTLY
+        function navigateTo(viewName, productId = null) {
+            appState.activeView = viewName;
+            
+            // Hide all page sections
+            document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
+
+            // Highlight Navbar
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-forest-700', 'font-bold');
+            });
+            const activeNav = document.getElementById(`nav-${viewName}`);
+            if (activeNav) activeNav.classList.add('text-forest-700', 'font-bold');
+
+            // Show targeted view
+            const targetView = document.getElementById(`view-${viewName}`);
+            if (targetView) targetView.classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Trigger Specific Renders
+            if (viewName === 'catalog') {
+                renderCatalog();
+            } else if (viewName === 'detail' && productId) {
+                renderProductDetail(productId);
+            } else if (viewName === 'cart') {
+                renderCartPage();
+            } else if (viewName === 'checkout') {
+                if (appState.cart.length === 0) {
+                    showToast('Keranjang Anda masih kosong!', 'error');
+                    navigateTo('catalog');
+                    return;
+                }
+                updateCheckoutTotal();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-3.5 rounded-xl shadow-lg font-bold text-xs text-white flex items-center gap-2 transition-all duration-300 pointer-events-auto ${type === 'success' ? 'bg-forest-700' : 'bg-red-600'}`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // GEAR CALCULATOR
+        function updateCalculator() {
+            const persons = parseInt(document.getElementById('calc-person').value);
+            const duration = parseInt(document.getElementById('calc-duration').value);
+            const weather = document.getElementById('calc-weather').value;
+
+            document.getElementById('calc-person-val').innerText = `${persons} Orang`;
+
+            const tenda = Math.ceil(persons / 4);
+            const sb = persons;
+            const matras = persons;
+            const cooking = Math.ceil(persons / 3);
+
+            let dailyPrice = (tenda * 25000) + (sb * 10000) + (matras * 5000) + (cooking * 10000);
+            if (weather === 'rainy') dailyPrice += 8000;
+
+            const totalPrice = dailyPrice * duration;
+            document.getElementById('calc-est-price').innerText = formatRupiah(totalPrice);
+
+            document.getElementById('calc-results-list').innerHTML = `
+                <span class="bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-slate-700 font-bold"><i class="fa-solid fa-campground text-emerald-600"></i> ${tenda}x Tenda Kap 4</span>
+                <span class="bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-slate-700 font-bold"><i class="fa-solid fa-bed text-indigo-600"></i> ${sb}x Sleeping Bag</span>
+                <span class="bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-slate-700 font-bold"><i class="fa-solid fa-fire-burner text-rose-600"></i> ${cooking}x Set Masak</span>
+                <span class="bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-slate-700 font-bold"><i class="fa-solid fa-matras text-amber-600"></i> ${matras}x Matras</span>
+            `;
+        }
+
+        // CATALOG & FILTERS
+        function filterCategoryAndNavigate(cat) {
+            appState.categoryFilter = cat;
+            navigateTo('catalog');
+            updatePillsUI(cat);
+        }
+
+        function setCategoryFilter(cat) {
+            appState.categoryFilter = cat;
+            updatePillsUI(cat);
+            renderCatalog();
+        }
+
+        function updatePillsUI(cat) {
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.className = 'cat-pill bg-forest-700 text-white px-4 py-2 rounded-full whitespace-nowrap transition';
+                } else {
+                    btn.className = 'cat-pill bg-white hover:bg-slate-100 text-slate-600 px-4 py-2 rounded-full border border-slate-200 whitespace-nowrap transition';
+                }
+            });
+        }
+
+        function applyFilters() {
+            appState.searchQuery = document.getElementById('catalog-search').value.toLowerCase();
+            appState.sortOrder = document.getElementById('catalog-sort').value;
+            renderCatalog();
+        }
+
+        function renderFeaturedHomeProducts() {
+            const container = document.getElementById('home-featured-products');
+            const featured = PRODUCTS.slice(0, 4);
+            container.innerHTML = featured.map(p => createProductCardHTML(p)).join('');
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalog-grid');
+            const emptyState = document.getElementById('catalog-empty');
+
+            let list = PRODUCTS.filter(p => {
+                const matchCat = appState.categoryFilter === 'all' || p.category === appState.categoryFilter;
+                const matchSearch = p.name.toLowerCase().includes(appState.searchQuery) || p.description.toLowerCase().includes(appState.searchQuery);
+                return matchCat && matchSearch;
+            });
+
+            if (appState.sortOrder === 'low-high') {
+                list.sort((a, b) => a.price - b.price);
+            } else if (appState.sortOrder === 'high-low') {
+                list.sort((a, b) => b.price - a.price);
+            }
+
+            if (list.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                grid.innerHTML = list.map(p => createProductCardHTML(p)).join('');
+            }
+        }
+
+        function createProductCardHTML(product) {
+            return `
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition duration-300 flex flex-col justify-between group">
+                    <div>
+                        <div class="relative aspect-video overflow-hidden bg-slate-100 cursor-pointer" onclick="navigateTo('detail', '${product.id}')">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-2 left-2 bg-white/90 backdrop-blur-md text-slate-800 text-[9px] font-black px-2 py-0.5 rounded uppercase">
+                                ${product.category}
+                            </span>
+                        </div>
+                        <div class="p-3.5 space-y-1">
+                            <div class="flex items-center gap-1 text-amber-500 text-[11px] font-bold">
+                                <i class="fa-solid fa-star"></i> ${product.rating} <span class="text-slate-400 font-normal">(${product.reviewsCount})</span>
+                            </div>
+                            <h3 onclick="navigateTo('detail', '${product.id}')" class="font-bold text-slate-900 text-xs sm:text-sm line-clamp-2 hover:text-forest-600 cursor-pointer">
+                                ${product.name}
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="p-3.5 pt-0 border-t border-slate-100 flex items-center justify-between mt-auto">
+                        <div>
+                            <span class="text-[9px] font-bold uppercase text-slate-400 block">Sewa / Hari</span>
+                            <span class="font-black text-forest-700 text-sm sm:text-base">${formatRupiah(product.price)}</span>
+                        </div>
+                        <button onclick="addToCart('${product.id}')" class="bg-forest-700 hover:bg-forest-800 text-white w-8 h-8 rounded-lg flex items-center justify-center transition">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProductDetail(id) {
+            const product = PRODUCTS.find(p => p.id === id);
+            if (!product) return;
+
+            const container = document.getElementById('detail-container');
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-3">
+                        <div class="rounded-2xl overflow-hidden border border-slate-200 aspect-square bg-slate-100">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="bg-emerald-50 text-emerald-800 text-xs font-bold p-3 rounded-xl border border-emerald-200 flex items-center gap-2">
+                            <i class="fa-solid fa-shield-cat text-lg text-emerald-600"></i>
+                            <span>Tanpa Deposit Uang. Cukup Jaminan KTP/SIM Asli!</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <span class="bg-forest-100 text-forest-800 text-[10px] font-black px-2.5 py-1 rounded-full uppercase">
+                                ${product.category}
+                            </span>
+                            <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900">${product.name}</h1>
+                            <div class="text-2xl font-black text-forest-700">${formatRupiah(product.price)} <span class="text-xs text-slate-400 font-normal">/ hari</span></div>
+
+                            <div class="space-y-1">
+                                <h4 class="font-bold text-xs uppercase text-slate-700">Fitur & Spesifikasi:</h4>
+                                <ul class="text-xs text-slate-600 space-y-1">
+                                    ${product.specs.map(s => `<li><i class="fa-solid fa-check text-forest-600"></i> ${s}</li>`).join('')}
+                                </ul>
+                            </div>
+
+                            <p class="text-xs text-slate-500 leading-relaxed">${product.description}</p>
+                        </div>
+
+                        <button onclick="addToCart('${product.id}')" class="w-full bg-forest-700 hover:bg-forest-800 text-white font-bold py-3.5 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // CART LOGIC (NO DEPOSIT)
+        function addToCart(productId) {
+            const existing = appState.cart.find(i => i.productId === productId);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                appState.cart.push({ productId, qty: 1 });
+            }
+            updateCartBadge();
+            showToast('Item ditambahkan ke keranjang!');
+        }
+
+        function updateCartBadge() {
+            const count = appState.cart.reduce((sum, i) => sum + i.qty, 0);
+            const badge = document.getElementById('cart-badge');
+            if (count > 0) {
+                badge.innerText = count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function calculateRentalDuration() {
+            const start = new Date(document.getElementById('rental-start-date').value);
+            const end = new Date(document.getElementById('rental-end-date').value);
+
+            if (end <= start) {
+                showToast('Tanggal pengembalian harus setelah tanggal ambil!', 'error');
+                const nextDay = new Date(start);
+                nextDay.setDate(nextDay.getDate() + 1);
+                document.getElementById('rental-end-date').value = nextDay.toISOString().split('T')[0];
+                appState.rentalDays = 1;
+            } else {
+                const diff = Math.abs(end - start);
+                appState.rentalDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
+            }
+
+            document.getElementById('rental-duration-display').innerText = `${appState.rentalDays} Hari`;
+            renderCartPage();
+        }
+
+        function updateCartQty(productId, delta) {
+            const item = appState.cart.find(i => i.productId === productId);
+            if (!item) return;
+
+            item.qty += delta;
+            if (item.qty <= 0) {
+                appState.cart = appState.cart.filter(i => i.productId !== productId);
+            }
+            updateCartBadge();
+            renderCartPage();
+        }
+
+        function renderCartPage() {
+            const listContainer = document.getElementById('cart-items-list');
+
+            if (appState.cart.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-10 p-4">
+                        <i class="fa-solid fa-cart-flatbed text-3xl text-slate-300 mb-2"></i>
+                        <p class="text-xs font-bold text-slate-600">Keranjang sewa Anda kosong</p>
+                        <button onclick="navigateTo('catalog')" class="mt-3 bg-forest-700 text-white font-bold px-4 py-2 rounded-xl text-xs">Pilih Alat Sekarang</button>
+                    </div>
+                `;
+                document.getElementById('cart-subtotal-per-day').innerText = formatRupiah(0);
+                document.getElementById('cart-grand-total').innerText = formatRupiah(0);
+                return;
+            }
+
+            let subtotalDaily = 0;
+
+            listContainer.innerHTML = appState.cart.map(item => {
+                const prod = PRODUCTS.find(p => p.id === item.productId);
+                const itemDaily = prod.price * item.qty;
+                subtotalDaily += itemDaily;
+
+                return `
+                    <div class="p-3 flex items-center justify-between gap-3 text-xs">
+                        <div class="flex items-center gap-3">
+                            <img src="${prod.image}" class="w-12 h-12 rounded-lg object-cover border border-slate-200">
+                            <div>
+                                <h4 class="font-bold text-slate-800 line-clamp-1">${prod.name}</h4>
+                                <span class="text-slate-400">${formatRupiah(prod.price)}/hr</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center border rounded-lg bg-slate-50">
+                                <button onclick="updateCartQty('${prod.id}', -1)" class="px-2 py-0.5 font-bold text-slate-600">-</button>
+                                <span class="px-2 font-bold">${item.qty}</span>
+                                <button onclick="updateCartQty('${prod.id}', 1)" class="px-2 py-0.5 font-bold text-slate-600">+</button>
+                            </div>
+                            <span class="font-extrabold text-slate-800">${formatRupiah(itemDaily * appState.rentalDays)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const grandTotal = subtotalDaily * appState.rentalDays; // NO DEPOSIT AT ALL
+            document.getElementById('cart-subtotal-per-day').innerText = formatRupiah(subtotalDaily);
+            document.getElementById('cart-days-count').innerText = `${appState.rentalDays} Hari`;
+            document.getElementById('cart-grand-total').innerText = formatRupiah(grandTotal);
+        }
+
+        // CHECKOUT & PAYMENT
+        function previewKtpUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('ktp-preview-img').src = evt.target.result;
+                    document.getElementById('ktp-upload-prompt').classList.add('hidden');
+                    document.getElementById('ktp-upload-preview').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateCheckoutTotal() {
+            let subtotalDaily = appState.cart.reduce((sum, item) => {
+                const prod = PRODUCTS.find(p => p.id === item.productId);
+                return sum + (prod.price * item.qty);
+            }, 0);
+
+            const grandTotal = subtotalDaily * appState.rentalDays;
+            document.getElementById('checkout-pay-now-amount').innerText = formatRupiah(grandTotal);
+        }
+
+        function handleCheckoutSubmit(e) {
+            e.preventDefault();
+
+            const bookingId = 'TAR-' + Math.floor(100000 + Math.random() * 900000);
+            const custName = document.getElementById('cust-name').value;
+            const startVal = document.getElementById('rental-start-date').value;
+            const endVal = document.getElementById('rental-end-date').value;
+            const payNowText = document.getElementById('checkout-pay-now-amount').innerText;
+
+            document.getElementById('receipt-booking-id').innerText = bookingId;
+            document.getElementById('receipt-cust-name').innerText = custName;
+            document.getElementById('receipt-dates').innerText = `${startVal} s/d ${endVal} (${appState.rentalDays} Hari)`;
+            document.getElementById('receipt-transfer-amount').innerText = payNowText;
+
+            appState.cart = [];
+            updateCartBadge();
+
+            navigateTo('receipt');
+            showToast('Pemesanan dibuat! Silakan bayar ke SeaBank 901503676168');
+        }
+
+        function sendWhatsAppConfirmation() {
+            const bookingId = document.getElementById('receipt-booking-id').innerText;
+            const custName = document.getElementById('receipt-cust-name').innerText;
+            const total = document.getElementById('receipt-transfer-amount').innerText;
+
+            const text = `Halo Admin TheAdventureRent, saya ingin mengonfirmasi pembayaran pemesanan rental:\n\n*Kode Booking:* ${bookingId}\n*Nama:* ${custName}\n*Total Pembayaran:* ${total}\n*Rekening Tujuan:* SeaBank 901503676168\n\nMohon dicek bukti transfer saya. Terima kasih!`;
+            
+            window.open(`https://wa.me/6282140691531?text=${encodeURIComponent(text)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
