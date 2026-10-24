@@ -1258,16 +1258,18 @@
 
             // 2. KIRIM DATA KE DATABASE INFINITYFREE
             fetch('https://admintheadventure.infinityfreeapp.com/proses_booking.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Respon server:', data);
-            })
-            .catch(error => {
-                console.error('Gagal kirim ke database:', error);
-            });
+    method: 'POST',
+    body: formData
+})
+.then(response => response.text()) // Ubah jadi .text() untuk melihat respons mentah
+.then(text => {
+    console.log('Respon mentah dari server:', text);
+    alert('Respon server: ' + text); // Ini akan memunculkan popup di HP-mu
+})
+.catch(error => {
+    console.error('Gagal kirim ke database:', error);
+    alert('Gagal koneksi: ' + error);
+});
 
             // 3. Tampilkan struk dan bersihkan keranjang
             document.getElementById('receipt-booking-id').innerText = bookingId;
