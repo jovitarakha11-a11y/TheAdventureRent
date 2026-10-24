@@ -1222,7 +1222,7 @@
             }
         }
 
-        function updateCheckoutTotal() {
+      function updateCheckoutTotal() {
             let subtotalDaily = appState.cart.reduce((sum, item) => {
                 const prod = PRODUCTS.find(p => p.id === item.productId);
                 return sum + (prod.price * item.qty);
@@ -1241,6 +1241,35 @@
             const endVal = document.getElementById('rental-end-date').value;
             const payNowText = document.getElementById('checkout-pay-now-amount').innerText;
 
+            // 1. Siapkan data untuk dikirim ke InfinityFree
+            const formData = new FormData();
+            formData.append('id_booking', bookingId);
+            formData.append('nama_penyewa', custName);
+            formData.append('tgl_sewa', startVal);
+            formData.append('tgl_kembali', endVal);
+            formData.append('durasi_hari', appState.rentalDays);
+            
+            let subtotalDaily = appState.cart.reduce((sum, item) => {
+                const prod = PRODUCTS.find(p => p.id === item.productId);
+                return sum + (prod.price * item.qty);
+            }, 0);
+            formData.append('total_bayar', subtotalDaily * appState.rentalDays);
+            formData.append('cart_items', JSON.stringify(appState.cart));
+
+            // 2. KIRIM DATA KE DATABASE INFINITYFREE
+            fetch('https://if0_43261709.infinityfreeapp.com/proses_booking.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Respon server:', data);
+            })
+            .catch(error => {
+                console.error('Gagal kirim ke database:', error);
+            });
+
+            // 3. Tampilkan struk dan bersihkan keranjang
             document.getElementById('receipt-booking-id').innerText = bookingId;
             document.getElementById('receipt-cust-name').innerText = custName;
             document.getElementById('receipt-dates').innerText = `${startVal} s/d ${endVal} (${appState.rentalDays} Hari)`;
